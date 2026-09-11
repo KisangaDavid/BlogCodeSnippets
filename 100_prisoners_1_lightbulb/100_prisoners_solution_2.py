@@ -41,5 +41,5 @@ print(
     f"Avg: {mean:.0f}\n"
     f"Min: {min(simulated_results)}\n"
     f"Max: {max(simulated_results)}\n"
-    f"Std deviation: {sum((x - mean)**2 for x in simulated_results / NUM_ITERATIONS)**0.5:.0f}"
+    f"Std deviation: {(sum((x - mean)**2 for x in simulated_results) / NUM_ITERATIONS)**0.5:.0f}"
 )
