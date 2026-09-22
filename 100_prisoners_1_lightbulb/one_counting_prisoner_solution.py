@@ -1,9 +1,7 @@
 import random
 
-NUM_ITERATIONS = 1000
+NUM_ITERATIONS = 10000
 NUM_PRISONERS = 100
-
-simulated_results = []
 
 def num_days_for_new_prisoner(counted_prisoners):
     num_days = 1
@@ -21,7 +19,9 @@ def num_days_for_counter(counting_prisoner):
         if chosen_prisoner == counting_prisoner:
             return num_days
         num_days += 1
-        
+
+simulated_results = []
+    
 for i in range(0, NUM_ITERATIONS):
     counting_prisoner = random.randint(1, NUM_PRISONERS)
     counted_prisoners = {counting_prisoner}
@@ -39,5 +39,5 @@ print(
     f"Mean: {mean:.0f}\n"
     f"Min: {min(simulated_results)}\n"
     f"Max: {max(simulated_results)}\n"
-    f"Mean Standard Error: {std_dev / NUM_ITERATIONS**0.5:.1f}"
+    f"Standard Error of Mean: {std_dev / NUM_ITERATIONS**0.5:.1f}"
 )

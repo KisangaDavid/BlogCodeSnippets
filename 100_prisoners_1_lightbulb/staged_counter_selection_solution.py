@@ -2,6 +2,7 @@ import random
 
 NUM_ITERATIONS = 10000
 NUM_PRISONERS = 100
+
 PHASE_ONE_LENGTH = 100
 
 simulated_results = []
@@ -49,5 +50,5 @@ print(
     f"Mean: {mean:.0f}\n"
     f"Min: {min(simulated_results)}\n"
     f"Max: {max(simulated_results)}\n"
-    f"Mean Standard Error: {std_dev / NUM_ITERATIONS**0.5:.1f}"
+    f"Standard Error of Mean: {std_dev / NUM_ITERATIONS**0.5:.1f}"
 )
