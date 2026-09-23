@@ -1,7 +1,7 @@
 import random
 from types import SimpleNamespace
 
-SIMULATION_CONFIG = SimpleNamespace(
+CONFIG = SimpleNamespace(
     num_iterations=10000,
     num_prisoners=100,
     num_sub_counters=10,
@@ -95,4 +95,4 @@ def estimate_mean(config):
     return mean
 
 if __name__ == "__main__":
-    estimate_mean(SIMULATION_CONFIG)
+    estimate_mean(CONFIG)

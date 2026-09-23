@@ -1,6 +1,6 @@
 import random
 
-NUM_ITERATIONS = 10000
+NUM_ITERATIONS = 1000
 NUM_PRISONERS = 100
 
 PHASE_ONE_LENGTH = 100
@@ -10,7 +10,7 @@ simulated_results = []
 def num_days_for_new_prisoner(counted_prisoners):
     num_days = 1
     while True:
-        chosen_prisoner = random.randint(1, NUM_PRISONERS)
+        chosen_prisoner = random.randrange(NUM_PRISONERS)
         if chosen_prisoner not in counted_prisoners:
             counted_prisoners.add(chosen_prisoner)
             return num_days 
@@ -19,7 +19,7 @@ def num_days_for_new_prisoner(counted_prisoners):
 def num_days_for_counter(counting_prisoner):
     num_days = 1
     while True:
-        chosen_prisoner = random.randint(1, NUM_PRISONERS)
+        chosen_prisoner = random.randrange(NUM_PRISONERS)
         if chosen_prisoner == counting_prisoner:
             return num_days
         num_days += 1
@@ -27,7 +27,7 @@ def num_days_for_counter(counting_prisoner):
 def execute_phase_one():
     counted_prisoners = set()
     for _ in range(0, PHASE_ONE_LENGTH):
-        chosen_prisoner = random.randint(1, NUM_PRISONERS)
+        chosen_prisoner = random.randrange(NUM_PRISONERS)
         if chosen_prisoner in counted_prisoners:
             return counted_prisoners, chosen_prisoner
         counted_prisoners.add(chosen_prisoner)

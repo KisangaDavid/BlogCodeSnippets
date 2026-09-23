@@ -2,14 +2,14 @@ import random
 from types import SimpleNamespace
 
 CONFIG = SimpleNamespace(
-    num_iterations=10000,
+    num_iterations=2000,
     num_prisoners=100,
     num_sub_counters=10,
-    stage_0_sub_length=4,
-    stage_1_length=2000,
-    stage_2_length=1500,
-    secondary_stage_1_length=300,
-    secondary_stage_2_length=300,
+    stage_0_sub_length=3,
+    stage_1_length=2086,
+    stage_2_length=2073,
+    secondary_stage_1_length=219,
+    secondary_stage_2_length=283,
 )
 
 class Prisoner:
@@ -21,12 +21,15 @@ class Prisoner:
         self.is_main_counter = False
         self.num_sub_counter_tokens = 0
 
-    def convert_to_sub_counter(self, stage=1):
+    def convert_to_sub_counter(self, sub_counter_quota, stage=1):
         self.sub_count += self.t1
         self.t1 = 0
         self.num_sub_counter_tokens += 1
+        if self.sub_count > sub_counter_quota:
+            self.t2 += 1
         if stage == 0:
             self.is_main_counter = True
+        
 
     def is_sub_counter(self):
         return self.num_sub_counter_tokens > 0
@@ -37,7 +40,7 @@ class Prisoner:
 def setup_prisoners(config):
     return [Prisoner() for _ in range(config.num_prisoners)]
 
-def run_stage_zero(prisoner_list, config):
+def run_stage_zero(prisoner_list, sub_counter_quota, config):
     bulb_on = False
     for stage in range(config.num_sub_counters):
         for day in range(config.stage_0_sub_length):
@@ -45,7 +48,7 @@ def run_stage_zero(prisoner_list, config):
             if day == 0:
                 if bulb_on:
                     chosen_prisoner.t1 += config.stage_0_sub_length - 1
-                    chosen_prisoner.convert_to_sub_counter(stage)
+                    chosen_prisoner.convert_to_sub_counter(sub_counter_quota, stage)
                 if chosen_prisoner.is_sub_counter():
                     chosen_prisoner.sub_count -= 1
                     bulb_on = True
@@ -54,11 +57,11 @@ def run_stage_zero(prisoner_list, config):
                     bulb_on = True
                 else:
                     bulb_on = False
-                    chosen_prisoner.convert_to_sub_counter(stage)
+                    chosen_prisoner.convert_to_sub_counter(sub_counter_quota, stage)
             elif day == config.stage_0_sub_length - 1:
                 if bulb_on and not chosen_prisoner.is_sub_counter():
                     chosen_prisoner.t1 += config.stage_0_sub_length - 1
-                    chosen_prisoner.convert_to_sub_counter(stage)
+                    chosen_prisoner.convert_to_sub_counter(sub_counter_quota, stage)
                     bulb_on = False
             else:
                 if bulb_on:
@@ -69,13 +72,13 @@ def run_stage_zero(prisoner_list, config):
                     else:
                         bulb_on = False
                         chosen_prisoner.t1 += day
-                        chosen_prisoner.convert_to_sub_counter(stage)
+                        chosen_prisoner.convert_to_sub_counter(sub_counter_quota, stage)
     return bulb_on
 
 def simulate_procedure(config):
     sub_counter_quota = config.num_prisoners // config.num_sub_counters
     prisoner_list = setup_prisoners(config)
-    bulb_on = run_stage_zero(prisoner_list, config)
+    bulb_on = run_stage_zero(prisoner_list, sub_counter_quota, config)
     num_days_taken = config.stage_0_sub_length * config.num_sub_counters
     next_prisoner_is_counter = bulb_on
     stage_1_length = config.stage_1_length
@@ -85,8 +88,8 @@ def simulate_procedure(config):
             num_days_taken += 1
             chosen_prisoner = prisoner_list[random.randrange(0, config.num_prisoners)]
             if bulb_on and next_prisoner_is_counter:
-                chosen_prisoner.t1 += 3
-                chosen_prisoner.convert_to_sub_counter()
+                chosen_prisoner.t1 += config.stage_0_sub_length - 1
+                chosen_prisoner.convert_to_sub_counter(sub_counter_quota)
                 next_prisoner_is_counter = False
             if not bulb_on and chosen_prisoner.t1 > 0:
                 bulb_on = True
