@@ -1,4 +1,4 @@
-#include "multiple_counters_sim.h"
+#include "sim.h"
 
 #include <dlib/global_optimization.h>
 

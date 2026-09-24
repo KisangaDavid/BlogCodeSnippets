@@ -1,6 +1,6 @@
 from types import SimpleNamespace
 
-from multiple_counters_staged_counter_selection_sim import estimate_mean
+from sim import estimate_mean
 from skopt import gp_minimize
 from skopt.space import Integer, Categorical
 

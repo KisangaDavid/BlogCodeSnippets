@@ -7,7 +7,7 @@
 #include <random>
 #include <vector>
 
-#include "multiple_counters_sim.h"
+#include "sim.h"
 
 struct Prisoner {
     int sub_count = 0;
