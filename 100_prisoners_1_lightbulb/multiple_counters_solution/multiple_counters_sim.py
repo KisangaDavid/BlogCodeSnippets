@@ -81,15 +81,15 @@ def simulate_procedure(config):
 
 
 def estimate_mean(config):
-    simulated_results = []
+    sim_results = []
     for _ in range(0, config.num_iterations):
-        simulated_results.append(simulate_procedure(config))
-    mean = sum(simulated_results) / config.num_iterations
-    std_dev = (sum((x - mean) ** 2 for x in simulated_results) / config.num_iterations) ** 0.5
+        sim_results.append(simulate_procedure(config))
+    mean = sum(sim_results) / config.num_iterations
+    std_dev = (sum((x - mean) ** 2 for x in sim_results) / config.num_iterations) ** 0.5
     print(
         f"Mean: {mean:.0f}\n"
-        f"Min: {min(simulated_results)}\n"
-        f"Max: {max(simulated_results)}\n"
+        f"Min: {min(sim_results)}\n"
+        f"Max: {max(sim_results)}\n"
         f"Standard Error of Mean: {std_dev / config.num_iterations**0.5:.1f}"
     )
     return mean

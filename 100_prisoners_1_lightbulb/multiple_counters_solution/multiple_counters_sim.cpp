@@ -7,15 +7,7 @@
 #include <random>
 #include <vector>
 
-struct Config {
-    int num_iterations = 1000000;
-    int num_prisoners = 100;
-    int num_sub_counters = 10;
-    int stage_1_length = 2252;
-    int stage_2_length = 1810;
-    int secondary_stage_1_length = 266;
-    int secondary_stage_2_length = 257;
-};
+#include "multiple_counters_sim.h"
 
 struct Prisoner {
     int sub_count = 0;
@@ -117,39 +109,30 @@ int simulate_procedure(const Config& config) {
 
 double estimate_mean(const Config& config) {
     auto start_time = std::chrono::steady_clock::now();
-    std::vector<int> simulated_results;
-    simulated_results.reserve(config.num_iterations);
+    std::vector<int> sim_results;
+    sim_results.reserve(config.num_iterations);
     for (int i = 0; i < config.num_iterations; ++i) {
-        simulated_results.push_back(simulate_procedure(config));
+        sim_results.push_back(simulate_procedure(config));
     }
-
-    double sum = std::accumulate(simulated_results.begin(), simulated_results.end(), 0.0);
-    double mean = sum / config.num_iterations;
-    double variance = 0.0;
-    for (int x : simulated_results) {
-        variance += (x - mean) * (x - mean);
-    }
+    double mean = std::accumulate(sim_results.begin(), sim_results.end(), 0.0) / config.num_iterations;
+    double variance = std::accumulate(
+        sim_results.begin(),
+        sim_results.end(),
+        0.0,
+        [mean](double acc, int x) {return acc + (x - mean) * (x - mean);}
+    );
     double std_dev = std::sqrt(variance / (config.num_iterations - 1));
     double standard_error = std_dev / std::sqrt(config.num_iterations);
-    auto [min, max] = std::minmax_element(
-        simulated_results.begin(),
-        simulated_results.end()
-    );
-
-    std::cout << std::fixed << std::setprecision(0);
+    auto [min, max] = std::minmax_element(sim_results.begin(), sim_results.end());
+    std::cout << std::setprecision(0);
     std::cout << "Mean: " << mean << '\n';
     std::cout << "Min: " << *min << '\n';
     std::cout << "Max: " << *max << '\n';
-    std::cout << std::fixed << std::setprecision(1);
+    std::cout << std::setprecision(1);
     std::cout << "Standard Error of Mean: " << standard_error << '\n';
     const auto elapsed = std::chrono::duration<double>(
         std::chrono::steady_clock::now() - start_time
     );
-    std::cout << std::fixed << std::setprecision(3) << "Runtime: " << elapsed.count() << " seconds\n";
+    std::cout << std::setprecision(3) << "Runtime: " << elapsed.count() << " seconds\n";
     return mean;
-}
-
-int main() {
-    estimate_mean(config);
-    return 0;
 }

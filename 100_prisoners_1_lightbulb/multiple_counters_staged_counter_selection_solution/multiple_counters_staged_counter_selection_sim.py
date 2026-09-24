@@ -6,10 +6,10 @@ CONFIG = SimpleNamespace(
     num_prisoners=100,
     num_sub_counters=10,
     stage_0_sub_length=3,
-    stage_1_length=2086,
-    stage_2_length=2073,
-    secondary_stage_1_length=219,
-    secondary_stage_2_length=283,
+    stage_1_length=2000,
+    stage_2_length=1500,
+    secondary_stage_1_length=300,
+    secondary_stage_2_length=300,
 )
 
 class Prisoner:
@@ -124,15 +124,15 @@ def simulate_procedure(config):
         stage_2_length = config.secondary_stage_2_length
 
 def estimate_mean(config):
-    simulated_results = []
+    sim_results = []
     for _ in range(config.num_iterations):
-        simulated_results.append(simulate_procedure(config))
-    mean = sum(simulated_results) / config.num_iterations
-    std_dev = (sum((x - mean) ** 2 for x in simulated_results) / config.num_iterations)**0.5
+        sim_results.append(simulate_procedure(config))
+    mean = sum(sim_results) / config.num_iterations
+    std_dev = (sum((x - mean) ** 2 for x in sim_results) / config.num_iterations)**0.5
     print(
         f"Mean: {mean:.0f}\n"
-        f"Min: {min(simulated_results)}\n"
-        f"Max: {max(simulated_results)}\n"
+        f"Min: {min(sim_results)}\n"
+        f"Max: {max(sim_results)}\n"
         f"Standard Error of Mean: {std_dev / config.num_iterations**0.5:.1f}"
     )
     return mean
