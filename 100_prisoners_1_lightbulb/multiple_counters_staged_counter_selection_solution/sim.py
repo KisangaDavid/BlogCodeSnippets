@@ -30,7 +30,6 @@ class Prisoner:
         self.t2 += new_quotas_reached - old_quotas_reached
         if stage == 0:
             self.is_main_counter = True
-        
 
     def is_sub_counter(self):
         return self.num_sub_counter_tokens > 0
