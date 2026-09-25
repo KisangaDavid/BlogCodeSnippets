@@ -85,7 +85,7 @@ int main() {
         sim_results.begin(),
         sim_results.end()
     );
-    std::cout << std::setprecision(0);
+    std::cout << std::fixed << std::setprecision(0);
     std::cout << "Mean: " << mean << '\n';
     std::cout << "Min: " << *min << '\n';
     std::cout << "Max: " << *max << '\n';

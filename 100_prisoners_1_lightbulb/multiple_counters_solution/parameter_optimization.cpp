@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <iostream>
 
-constexpr int NUM_ITERATIONS = 5000;
+constexpr int NUM_ITERATIONS = 20000;
 constexpr int NUM_PRISONERS = 100;
 constexpr int NUM_SUB_COUNTERS = 10;
 constexpr int NUM_CALLS = 1000;

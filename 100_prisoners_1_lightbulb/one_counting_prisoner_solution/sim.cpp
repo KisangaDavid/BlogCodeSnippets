@@ -7,7 +7,7 @@
 #include <vector>
 #include <numeric>
 
-constexpr int NUM_ITERATIONS = 1000;
+constexpr int NUM_ITERATIONS = 1000000;
 constexpr int NUM_PRISONERS = 100;
 
 std::mt19937 rng(std::random_device{}());
@@ -65,7 +65,7 @@ int main() {
     double standard_error = std_dev / std::sqrt(NUM_ITERATIONS);
     auto [min, max] = std::minmax_element(sim_results.begin(), sim_results.end());
 
-    std::cout << std::setprecision(0);
+    std::cout << std::fixed << std::setprecision(0);
     std::cout << "Mean: " << mean << '\n';
     std::cout << "Min: " << *min << '\n';
     std::cout << "Max: " << *max << '\n';

@@ -18,12 +18,12 @@ struct Prisoner {
     int num_sub_counter_tokens = 0;
 
     void convert_to_sub_counter(int sub_counter_quota, int stage = 1) {
+        int old_quotas_reached = sub_count / sub_counter_quota;
         sub_count += t1;
+        int new_quotas_reached = sub_count / sub_counter_quota;
         t1 = 0;
         num_sub_counter_tokens += 1;
-        if (sub_count > sub_counter_quota) {
-            t2 += 1;
-        }
+        t2 += new_quotas_reached - old_quotas_reached;
         if (stage == 0) {
             is_main_counter = true;
         }
@@ -107,6 +107,7 @@ int simulate_procedure(const Config& config) {
                 chosen_prisoner.t1 += config.stage_0_sub_length - 1;
                 chosen_prisoner.convert_to_sub_counter(sub_counter_quota);
                 next_prisoner_is_counter = false;
+                bulb_on = false;
             }
             if (!bulb_on && chosen_prisoner.t1 > 0) {
                 bulb_on = true;
@@ -169,7 +170,7 @@ double estimate_mean(const Config& config) {
     double std_dev = std::sqrt(variance / (config.num_iterations - 1));
     double standard_error = std_dev / std::sqrt(config.num_iterations);
     auto [min, max] = std::minmax_element(sim_results.begin(), sim_results.end());
-    std::cout << "Mean: " << std::setprecision(0) << mean << '\n';
+    std::cout << std::fixed << "Mean: " << std::setprecision(0) << mean << '\n';
     std::cout << "Min: " << *min << '\n';
     std::cout << "Max: " << *max << '\n';
     std::cout << "Standard Error of Mean: " << std::setprecision(1) << standard_error << '\n';
@@ -184,4 +185,3 @@ int main() {
     Config config;
     estimate_mean(config);
 }
-

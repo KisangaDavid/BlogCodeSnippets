@@ -1,4 +1,4 @@
-#include "multiple_counters_staged_counter_selection_sim.h"
+#include "sim.h"
 
 #include <dlib/global_optimization.h>
 
@@ -6,7 +6,7 @@
 #include <iostream>
 #include <vector>
 
-constexpr int NUM_ITERATIONS = 10000;
+constexpr int NUM_ITERATIONS = 20000;
 constexpr int NUM_PRISONERS = 100;
 constexpr int NUM_SUB_COUNTERS = 10;
 constexpr int NUM_CALLS = 1000;
@@ -46,7 +46,7 @@ int main() {
         dlib::max_function_calls(NUM_CALLS)
     );
     const auto& x = result.x;
-    std::cout << std::setprecision(0);
+    std::cout << std::fixed << std::setprecision(0);
     std::cout << "Number of sub-counters: " << NUM_SUB_COUNTERS << '\n';
     std::cout << "Stage 0 sub length: " << static_cast<int>(x(0)) << '\n';
     std::cout << "Stage 1 length: " << static_cast<int>(x(1)) << '\n';

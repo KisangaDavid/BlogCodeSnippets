@@ -5,7 +5,7 @@ CONFIG = SimpleNamespace(
     num_iterations=2000,
     num_prisoners=100,
     num_sub_counters=10,
-    stage_0_sub_length=3,
+    stage_0_sub_length=4,
     stage_1_length=2000,
     stage_2_length=1500,
     secondary_stage_1_length=300,
@@ -22,11 +22,12 @@ class Prisoner:
         self.num_sub_counter_tokens = 0
 
     def convert_to_sub_counter(self, sub_counter_quota, stage=1):
+        old_quotas_reached = self.sub_count // sub_counter_quota
         self.sub_count += self.t1
+        new_quotas_reached = self.sub_count // sub_counter_quota
         self.t1 = 0
         self.num_sub_counter_tokens += 1
-        if self.sub_count > sub_counter_quota:
-            self.t2 += 1
+        self.t2 += new_quotas_reached - old_quotas_reached
         if stage == 0:
             self.is_main_counter = True
         
@@ -91,6 +92,7 @@ def simulate_procedure(config):
                 chosen_prisoner.t1 += config.stage_0_sub_length - 1
                 chosen_prisoner.convert_to_sub_counter(sub_counter_quota)
                 next_prisoner_is_counter = False
+                bulb_on = False
             if not bulb_on and chosen_prisoner.t1 > 0:
                 bulb_on = True
                 chosen_prisoner.t1 -= 1
@@ -128,7 +130,7 @@ def estimate_mean(config):
     for _ in range(config.num_iterations):
         sim_results.append(simulate_procedure(config))
     mean = sum(sim_results) / config.num_iterations
-    std_dev = (sum((x - mean) ** 2 for x in sim_results) / config.num_iterations)**0.5
+    std_dev = (sum((x - mean) ** 2 for x in sim_results) / (config.num_iterations - 1))**0.5
     print(
         f"Mean: {mean:.0f}\n"
         f"Min: {min(sim_results)}\n"

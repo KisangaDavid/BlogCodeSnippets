@@ -124,7 +124,7 @@ double estimate_mean(const Config& config) {
     double std_dev = std::sqrt(variance / (config.num_iterations - 1));
     double standard_error = std_dev / std::sqrt(config.num_iterations);
     auto [min, max] = std::minmax_element(sim_results.begin(), sim_results.end());
-    std::cout << std::setprecision(0);
+    std::cout << std::fixed << std::setprecision(0);
     std::cout << "Mean: " << mean << '\n';
     std::cout << "Min: " << *min << '\n';
     std::cout << "Max: " << *max << '\n';
@@ -135,4 +135,9 @@ double estimate_mean(const Config& config) {
     );
     std::cout << std::setprecision(3) << "Runtime: " << elapsed.count() << " seconds\n";
     return mean;
+}
+
+int main() {
+    Config config;
+    estimate_mean(config);
 }
